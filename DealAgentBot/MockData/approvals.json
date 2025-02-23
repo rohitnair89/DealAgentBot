@@ -1,0 +1,39 @@
+[
+  {
+    "Id": "1",
+    "ApprovalName": "Support Pricing",
+    "EntityId": "12121",
+    "EntityType": "Contract",
+    "ApprovedBy": "",
+    "Status": "Pending",
+    "Comments": ""
+  },
+  {
+    "Id": "2",
+    "ApprovalName": "Support Discount",
+    "EntityId": "12121",
+    "EntityType": "Contract",
+    "ApprovedBy": "",
+    "Status": "Rejected",
+    "Comments": "Needs more work"
+  },
+  {
+    "Id": "2",
+    "ApprovalName": "Sales Manager",
+    "EntityId": "12121",
+    "EntityType": "Contract",
+    "ApprovedBy": "Phony Stark",
+    "Status": "Approved",
+    "Comments": "This is good to go."
+  },
+  {
+    "Id": "3",
+    "ApprovalName": "Support Discount",
+    "EntityId": "12122",
+    "EntityType": "Contract",
+    "ApprovedBy": "John Doe",
+    "ApprovedOn": "2023-10-03T09:45:00Z",
+    "Status": "Approved",
+    "Comments": "Approved"
+  }
+]

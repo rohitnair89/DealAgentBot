@@ -1,0 +1,17 @@
+[
+  {
+    "ContractId": "12121",
+    "CustomerName": "Acme Corp",
+    "ContractName": "Acme Contract 1",
+    "ContractState": "Active",
+    "Revenue": 100000.00
+  },
+  {
+    "ContractId": "12122",
+    "CustomerName": "Beta Inc",
+    "ContractName": "Beta Contract 1",
+    "ContractState": "Draft",
+    "Revenue": 50000.00
+  }
+]
+

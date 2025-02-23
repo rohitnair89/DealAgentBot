@@ -1,0 +1,22 @@
+[
+  {
+    "RiskId": "1",
+    "EntityId": "12121",
+    "EntityType": "Contract",
+    "RiskRating": "Low"
+  },
+  {
+    "RiskId": "2",
+    "EntityId": "12122",
+    "EntityType": "Contract",
+    "RiskRating": "Medium"
+  },
+  {
+    "RiskId": "3",
+    "EntityId": "E123",
+    "EntityType": "Document",
+    "RiskRating": "High"
+  }
+]
+
+
