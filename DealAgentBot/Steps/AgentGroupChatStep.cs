@@ -28,6 +28,7 @@ namespace DealAgentBot.Steps
 
             // Reset chat state from previous invocation
             await chat.ResetAsync();
+            GlobalSettings.ResetFirstAgent = true;
             chat.IsComplete = false;
 
             ChatMessageContent message = new(AuthorRole.User, input);
@@ -37,6 +38,7 @@ namespace DealAgentBot.Steps
 
             await foreach (ChatMessageContent response in chat.InvokeAsync())
             {
+                GlobalSettings.ResetFirstAgent = false;
                 HelperFuncs.PrintGroupMessage(response, true);
                 await context.EmitEventAsync(new() { Id = AgentOrchestrationEvents.GroupMessage, Data = response });
             }

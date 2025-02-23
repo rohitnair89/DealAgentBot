@@ -61,9 +61,11 @@ namespace DealAgentBot
         - If you have the contract id, respond with: "Please x the approval y for EntityType contract and EntityID z" where x is the action to be taken, y is the name of the approval and z is the id of the contract.
         - If you do not have the contract id and have the contract name, first retrieve the contract details to obtain the contract ID and respond with: "Please x the approval y for EntityType contract and EntityID z" where x is the action to be taken, y is the name of the approval and z is the id of the contract.
 
-        If you are requested to take action (possible actions are approve or reject only) on an approval:
-         - Make sure you evaluate any conditions for the approval before proceeding, if any are provided in the request. Get necessary details to evaluate the conditions, if any.
-         - Once you determine that an action can be taken, respond with "Please x the approval y for EntityType contract and EntityID z" where x is the action to be taken, y is the name of the approval and z is the id of the contract.
+        If asked to approve or reject an approval:
+        - If there are any conditions in the request, evaluate them first. If you need details to evaluate the condition:
+            - If you need risk details, respond with: "Get risk details for EntityType contract and EntityID x", where x is the contract ID.
+            - If you need approval details, respond with: "Get approval details for EntityType contract and EntityID x", where x is the contract ID.
+        - If there are no conditions in the request, respond with: "Please [x] the approval [y] for EntityType contract and EntityID [z]." (where [x] is the action, [y] is the approval name, and [z] is the contract ID.)
 
         Follow these instructions strictly and do not offer additional responses beyond what is requested.
         
@@ -128,6 +130,9 @@ namespace DealAgentBot
         Address the user directly with a summary of the response.
         """;
 
+        private static ILoggerFactory? loggerFactory = NullLoggerFactory.Instance;
+        private static bool enableLogging = false;
+
         static async Task Main(string[] args)
         {
             KernelProcess process = SetupAgentProcess<BasicAgentChatUserInput>("DealAgentDelegation");
@@ -181,8 +186,7 @@ namespace DealAgentBot
                 - {{{ApprovalAgentName}}}
                 
                 Follow these rules strictly when selecting the next participant:
-                - If 
-                - If this is the first instruction, always respond with {{{ContractAgentName}}}.
+                - After user input, always respond with {{{ContractAgentName}}} and ignore other conditions.
                 - If the instruction requests approval details, respond with {{{ApprovalAgentName}}}.
                 - If the instruction requests risk details, respond with {{{RiskAgentName}}}.
                 - If the instruction requests contract details, respond with {{{ContractAgentName}}}.
@@ -195,28 +199,6 @@ namespace DealAgentBot
                 {{$history}}
                 """,
                     safeParameterNames: "history");
-
-    //        KernelFunction selectionFunction =
-    //AgentGroupChat.CreatePromptFunctionForStrategy(
-    //    $$$"""
-    //            Determine which participant takes the next turn in a conversation based on the the most recent participant's instruction.
-    //            State only the name of the participant to take the next turn.
-                
-    //            Choose only from these participants:
-    //            - {{{ContractAgentName}}}
-    //            - {{{ApprovalAgentName}}}
-    //            - {{{RiskAgentName}}}
-                
-    //            Always follow these rules when selecting the next participant:
-    //            - After user input, it is always {{{ContractAgentName}}}'s turn
-    //            - If {{{ContractAgentName}}} is requesting approval details, it is {{{ApprovalAgentName}}}'s turn
-    //            - If {{{ContractAgentName}}} is requesting risk details, it is {{{RiskAgentName}}}'s turn
-    //            - If {{{ApprovalAgentName}}} is requesting an entity type and entity id, it is {{{ContractAgentName}}}'s turn
-                                
-    //            History:
-    //            {{$history}}
-    //            """,
-    //    safeParameterNames: "history");
 
             KernelFunction terminationFunction =
                 AgentGroupChat.CreatePromptFunctionForStrategy(
@@ -234,7 +216,7 @@ namespace DealAgentBot
                 {
                     // NOTE: Replace logger when using outside of sample.
                     // Use `this.LoggerFactory` to observe logging output as part of sample.
-                    LoggerFactory = NullLoggerFactory.Instance,
+                    LoggerFactory = loggerFactory,
                     ExecutionSettings = new()
                     {
                         SelectionStrategy =
@@ -244,18 +226,12 @@ namespace DealAgentBot
                                 HistoryVariableName = "history",
                                 HistoryReducer = new ChatHistoryTruncationReducer(1),
                                 ResultParser = (result) => {
-                                    // Check if it's a new group chat
-                                    //if (string.IsNullOrEmpty(result.GetValue<string>()))
-                                    //{
-                                    //    return ContractAgentName;
-                                    //}
-
-                                    return result.GetValue<string>() ?? ContractAgentName;
-                                }
+                                    return GlobalSettings.ResetFirstAgent || string.IsNullOrEmpty(result.GetValue<string>()) ? ContractAgentName : result.GetValue<string>();
+                                },
                                 //Arguments = new KernelArguments(new PromptExecutionSettings { ExtensionData = new Dictionary<string, object> { { "history", "history" } } }),
                                 //Arguments = new KernelArguments
                                 //{
-                                //    {"resetInitialAgent", true }
+                                //    {"resetInitialAgent", GlobalSettings.ResetFirstAgent }
                                 //}
                             },
                         TerminationStrategy =
@@ -302,14 +278,14 @@ namespace DealAgentBot
             builder.Services.AddSingleton<IChatHistoryProvider>(new ChatHistoryProvider(chatHistory));
 
             // Configure logging to console
-            var loggerFactory = LoggerFactory.Create(loggingBuilder =>
+            loggerFactory = LoggerFactory.Create(loggingBuilder =>
             {
                 loggingBuilder.AddConsole();
-                loggingBuilder.SetMinimumLevel(LogLevel.Information);
+                loggingBuilder.SetMinimumLevel(LogLevel.Debug);
             });
-
             // NOTE: Uncomment to see process logging
-            builder.Services.AddSingleton(loggerFactory);
+            if (enableLogging)
+                builder.Services.AddSingleton(loggerFactory);
 
             return builder.Build();
         }
