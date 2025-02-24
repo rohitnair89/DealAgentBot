@@ -40,13 +40,7 @@ namespace DealAgentBot.Steps
             {
                 // Capture each response
                 history.Add(message);
-
-                // Emit event for each agent response
-                //await context.EmitEventAsync(new() { Id = AgentOrchestrationEvents.AgentResponse, Data = message });
                 HelperFuncs.PrintMessage(message.ToString(), "DealAgent");
-                //Console.ForegroundColor = ConsoleColor.Blue;
-                //Console.WriteLine($"DealAgent: {message} " );
-                //Console.ResetColor();
             }
 
             // Commit any changes to the chat history
@@ -90,7 +84,6 @@ namespace DealAgentBot.Steps
             Microsoft.SemanticKernel.ChatMessageContent message = new(AuthorRole.Assistant, response) { AuthorName = agent.Name };
             history.Add(message);
 
-            //await context.EmitEventAsync(new() { Id = AgentOrchestrationEvents.AgentResponse, Data = message });
             HelperFuncs.PrintMessage(message.ToString(), "DealAgent");
 
             await context.EmitEventAsync(new() { Id = AgentOrchestrationEvents.AgentResponded });

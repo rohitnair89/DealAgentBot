@@ -45,28 +45,6 @@ namespace DealAgentBot.Steps
         internal string GetNextUserMessage()
         {
             return HelperFuncs.GetNextUserMessage();
-            //var userMsg = string.Empty;
-            //Console.ForegroundColor = ConsoleColor.Yellow;
-            //Console.Write("User: ");
-            //userMsg = Console.ReadLine();
-            //Console.ResetColor();
-            //return userMsg;
-
-            //if (_state != null && _state.CurrentInputIndex >= 0 && _state.CurrentInputIndex < this._state.UserInputs.Count)
-            //{
-            //    //var userMessage = this._state!.UserInputs[_state.CurrentInputIndex];
-            //    //_state.CurrentInputIndex++;
-
-            //    Console.ForegroundColor = ConsoleColor.Yellow;
-            //    Console.WriteLine($"USER: ");
-            //    var userMessage = Console.ReadLine();
-            //    Console.ResetColor();
-
-            //    return userMessage;
-            //}
-
-            //Console.WriteLine("USER_INPUT: No more scripted user messages defined, returning empty string as user message");
-            //return string.Empty;
         }
 
         /// <summary>
