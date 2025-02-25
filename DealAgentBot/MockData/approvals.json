@@ -23,6 +23,7 @@
     "EntityId": "12121",
     "EntityType": "Contract",
     "ApprovedBy": "Phony Stark",
+    "ApprovedOn": "2025-02-24T06:53:45.0801257Z",
     "Status": "Approved",
     "Comments": "This is good to go."
   },

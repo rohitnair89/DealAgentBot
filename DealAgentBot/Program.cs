@@ -27,26 +27,6 @@ namespace DealAgentBot
         Never provide a direct answer to the user's request.
         """;
 
-        //private const string DealAgentInstructions =
-        //"""
-        //You are a deal agent responsible for assisting the user with contract details.
-        //You delegate the request from the user to agents who are responsible to provide the appropriate information.
-        //You receive responses from the specialized agents and relay it back to the user.
-        //You can proceed with the instruction if you have a contract id. The contract id is always a number and never words.
-        //You can also proceed with the instruction if the user has provided the name of the contract, and in this case you don't need to confirm the id of the contract with the user.
-        //If the user requests for information of all contracts, proceed with the instruction.
-        //Never provide a direct answer to the user's request.
-        //""";
-
-        //private const string DealAgentInstructions =
-        //"""
-        //Capture information from the user about contract details.
-        //If the user requests for information of all contracts, proceed with the instruction.
-        //If the user requests for a specific contract's details, proceed with the instruction when you have the Id or name of the contract.
-        //If the user is asking for approval details of a contract, make sure you have the id of the contract before proceeding. The id of the contract will be a number and never words.
-        //Never provide a direct answer to the user's request.
-        //""";
-
         private const string ContractAgentInstructions =
         $$$"""
         You are a contract agent, responsible for providing contract details.
@@ -71,32 +51,6 @@ namespace DealAgentBot
         
         """;
 
-        //private const string ContractAgentInstructions =
-        //$$$"""
-        //You are a contract agent responsible for providing contract details.
-        //You can provide details of all contracts if explicitly instructed to do so.
-
-        //If you are asked for contract details of a specific contract:
-        //- Proceed only if you have the contract ID (which must be a number, never words).
-        //- If given a contract name, first retrieve the contract details and then proceed.
-
-        //If asked for approval details of a contract, respond with:
-        //"Get approval details for EntityType contract and EntityID x", where x is the contract ID.
-
-        //If asked for risk details of a contract:
-        //"Get risk details for EntityType contract and EntityID y", where y is the contract ID.
-
-        //Respond exactly as instructed. Do not provide additional information beyond the requested response."
-        //""";
-
-        //private const string ContractAgentInstructions =
-        //"""
-        //Evaluate contract details in response to the current direction.
-        //Be as concise as possible.
-        //If approval details are needed for the contract you will need to pass on necessary details to the ApprovalAgent
-        //Just respond as per current direction and do not offer more assistance.
-        //""";
-
         private const string ApprovalAgentInstructions =
         """
         You are an approval agent that is responsible for providing details of approvals as well as approving or recjecting the approvals for an entity type and entity id.
@@ -106,11 +60,6 @@ namespace DealAgentBot
         Just respond as per current direction. Do not offer more assistance in an additional message.
         """;
 
-        //private const string ApprovalAgentInstructions =
-        //"""
-        //If there is a request for approval information, provide approval information in response to the current direction.
-        //If there is an instruction to approve or reject an approval, proceed only if you have the entity name, entity id and the name of the approval.
-        //""";
 
         private const string RiskAgentInstructions =
         """
@@ -154,11 +103,6 @@ namespace DealAgentBot
                         Id = AgentOrchestrationEvents.StartProcess,
                         Data = null
                     });
-
-            //foreach (ChatMessageContent message in chatHistory)
-            //{
-            //    RenderMessageStep.Render(message);
-            //}
         }
 
         private static void SetupGroupChat(IKernelBuilder builder, Kernel kernel)
@@ -228,11 +172,6 @@ namespace DealAgentBot
                                 ResultParser = (result) => {
                                     return GlobalSettings.ResetFirstAgent || string.IsNullOrEmpty(result.GetValue<string>()) ? ContractAgentName : result.GetValue<string>();
                                 },
-                                //Arguments = new KernelArguments(new PromptExecutionSettings { ExtensionData = new Dictionary<string, object> { { "history", "history" } } }),
-                                //Arguments = new KernelArguments
-                                //{
-                                //    {"resetInitialAgent", GlobalSettings.ResetFirstAgent }
-                                //}
                             },
                         TerminationStrategy =
                             new KernelFunctionTerminationStrategy(terminationFunction, kernel)
@@ -410,23 +349,7 @@ namespace DealAgentBot
 
             public override void PopulateUserInputs(UserInputState state)
             {
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add(Console.ReadLine());
-                //state.UserInputs.Add("Hi");
-                //state.UserInputs.Add("Get me contract details of contract with id 12121");
-                //state.UserInputs.Add("Correct");
-                //state.UserInputs.Add("That's all, thank you");
-                //state.UserInputs.Add("When is an open time to go camping near home for 4 days after the end of this week?");
-                //state.UserInputs.Add("Yes, and I'd prefer nice weather.");
-                //state.UserInputs.Add("Sounds good, add the soonest option without conflicts to my calendar");
-                //state.UserInputs.Add("Correct");
-                //state.UserInputs.Add("That's all, thank you");
+
             }
         }
     }

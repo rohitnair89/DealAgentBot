@@ -1,4 +1,5 @@
 ﻿using DealAgentBot.Models;
+using DealAgentBot.Services;
 using Microsoft.SemanticKernel;
 using System.ComponentModel;
 using System.Text.Json;
@@ -7,41 +8,32 @@ namespace DealAgentBot.Plugins
 {
     internal sealed class ContractPlugin
     {
-        private readonly string _contractsFilePath = "MockData/contracts.json";
+        private readonly ContractService _contractService;
 
+        public ContractPlugin()
+        {
+            _contractService = new ContractService();
+        }
 
         [KernelFunction("GetAllContracts")]
         [Description("Gets all contracts")]
-        public async Task<IEnumerable<Contract>> GetAllContractsAsync()
+        public async Task<IEnumerable<Contract>> GetAllContracts()
         {
-            return await LoadContractsFromFileAsync();
+            return await _contractService.GetAllContractsAsync();
         }
 
         [KernelFunction("GetContractById")]
         [Description("Gets the details of a contract by contract Id")]
-        public async Task<Contract> GetContractByIdAsync(string contractId)
+        public async Task<Contract> GetContractById(string contractId)
         {
-            var contracts = await LoadContractsFromFileAsync();
-            return contracts.FirstOrDefault(c => c.ContractId == contractId);
+            return await _contractService.GetContractByIdAsync(contractId);
         }
 
         [KernelFunction("GetContractByName")]
         [Description("Gets the details of a contract by contract name")]
-        public async Task<IEnumerable<Contract>> GetContractsByContractNameAsync(string contractName)
+        public async Task<IEnumerable<Contract>> GetContractsByContractName(string contractName)
         {
-            var contracts = await LoadContractsFromFileAsync();
-            return contracts.Where(c => string.Equals(c.ContractName, contractName, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private async Task<List<Contract>> LoadContractsFromFileAsync()
-        {
-            if (!File.Exists(_contractsFilePath))
-            {
-                return new List<Contract>();
-            }
-
-            var json = await File.ReadAllTextAsync(_contractsFilePath);
-            return JsonSerializer.Deserialize<List<Contract>>(json) ?? new List<Contract>();
+            return await _contractService.GetContractsByContractNameAsync(contractName);
         }
     }
 }

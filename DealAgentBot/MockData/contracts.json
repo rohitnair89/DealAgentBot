@@ -1,8 +1,8 @@
 [
   {
     "ContractId": "12121",
-    "CustomerName": "Acme Corp",
-    "ContractName": "Acme Contract 1",
+    "CustomerName": "Disney Corp",
+    "ContractName": "Disney Renewal",
     "ContractState": "Active",
     "Revenue": 100000.00
   },
